@@ -1,22 +1,21 @@
 import { DataSource } from "typeorm";
 import { User } from "../entities/User.js";
+import { DigimonCard } from "../entities/DigimonCard.js";
 import { IS_PRODUCTION } from "../constants.js";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import * as dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
-console.log("filename", __filename);
 const __dirname = dirname(__filename);
-console.log("dirname", __dirname);
+
+dotenv.config();
 
 export const dataSource = new DataSource({
   type: "postgres",
-  database: "digimon",
-  username: "postgres",
-  password: "postgres",
+  url: process.env.DATABASE_URL,
   logging: !IS_PRODUCTION,
-  synchronize: true,
+  synchronize: false,
   migrations: [path.join(__dirname, "../migrations/*")],
-  entities: [User],
-  port: 5432,
+  entities: [User, DigimonCard],
 });

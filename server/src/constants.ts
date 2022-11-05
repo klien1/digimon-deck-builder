@@ -1,2 +1,2 @@
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";
-export const PORT = 5000;
+export const COOKIE_NAME = "digi_user";

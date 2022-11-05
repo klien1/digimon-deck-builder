@@ -1,52 +1,85 @@
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
-// import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
-// import http from "http";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { schema } from "./resolvers/schema.js";
-import { dataSource } from "./configs/datasource.js";
-// import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import { PORT } from "./constants.js";
-import { buildSchema } from "type-graphql";
-import { UserResolver } from "./resolvers/user.js";
+import { dataSource } from "./configs/ormconfig.js";
+import { IS_PRODUCTION } from "./constants.js";
+import * as dotenv from "dotenv";
+import { userSession, redisClient } from "./configs/redis.config.js";
 
-// interface MyContext {
-//   token?: string;
-// }
+import { DigimonCard } from "./entities/DigimonCard.js";
+import cardData from "./entities/card-data.json" assert { type: "json" };
+
+declare module "express-session" {
+  export interface SessionData {
+    userId: number;
+  }
+}
 
 async function main() {
-  // Required logic for integrating with Express
+  dotenv.config();
 
-  await dataSource.initialize().catch((error) => console.error(error));
+  try {
+    await dataSource.initialize();
+  } catch (error) {
+    console.error("db connection error: ", error);
+  }
+
+  let card;
+  try {
+    card = await dataSource
+      .getRepository("digimon_card")
+      .createQueryBuilder("card")
+      .getOne();
+  } catch (error) {
+    card = null;
+    console.error("error accessing card database");
+  }
+
+  if (!card) {
+    try {
+      await dataSource
+        .createQueryBuilder()
+        .insert()
+        .into(DigimonCard)
+        .values(cardData)
+        .execute();
+    } catch (error) {
+      console.error("error initializing database");
+    }
+  }
 
   const app = express();
 
-  // const httpServer = http.createServer(app);
+  // Set up our Express middleware to handle CORS, body parsing,
+  app.set("trust proxy", !IS_PRODUCTION);
+
+  app.use(
+    cors<cors.CorsRequest>({
+      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      credentials: true,
+    }),
+    bodyParser.json()
+  );
+
+  app.use(userSession);
 
   const apolloServer = new ApolloServer({
     schema,
-    // plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    context: ({ req, res }) => ({ req, res, redisClient }),
   });
 
-  // const apolloServer = new ApolloServer({
-  //   schema: await buildSchema({
-  //     resolvers: [UserResolver],
-  //   }),
-  // });
   await apolloServer.start().catch((e) => console.log(e));
-  apolloServer.applyMiddleware({ app });
-
-  // Set up our Express middleware to handle CORS, body parsing,
-  app.use(cors<cors.CorsRequest>(), bodyParser.json());
-
-  app.get("/hello", (_, res) => {
-    res.send({ hello: "world" });
+  apolloServer.applyMiddleware({
+    app,
+    cors: { credentials: true, origin: "https://studio.apollographql.com" },
   });
 
-  app.listen(PORT, () =>
-    console.log(`🚀 Server ready at http://localhost:${PORT}/`)
+  const port = process.env.PORT ?? 4000;
+  app.listen(port, () =>
+    console.log(`🚀 Server ready at http://localhost:${port}/`)
   );
 }
 

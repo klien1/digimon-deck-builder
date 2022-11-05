@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:16
 
 WORKDIR /app
 
@@ -10,4 +10,8 @@ RUN npm install
 
 COPY  . ./
 
-CMD ["npm", "start"]
+# ENV NODE_ENV production
+
+CMD ["node", "./dist/index.js"]
+
+# USER node
