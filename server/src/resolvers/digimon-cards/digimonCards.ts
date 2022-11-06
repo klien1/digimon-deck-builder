@@ -12,9 +12,10 @@ export class DigimonCardResolver {
 
   @Query(() => [DigimonCard])
   async getDigimonCards() {
+    console.log("fetching cards");
     const cards = await this.digimonCardRepository
       .createQueryBuilder("card")
-      // .take(20)
+      .take(20)
       .getMany();
 
     return cards;

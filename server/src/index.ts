@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
-import cors from "cors";
+// import cors from "cors";
 import bodyParser from "body-parser";
 import { schema } from "./resolvers/schema.js";
 import { dataSource } from "./configs/ormconfig.js";
@@ -57,10 +57,10 @@ async function main() {
   app.set("trust proxy", !IS_PRODUCTION);
 
   app.use(
-    cors<cors.CorsRequest>({
-      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
-      credentials: true,
-    }),
+    // cors<cors.CorsRequest>({
+    //   origin: ["http://localhost:5173", "https://studio.apollographql.com"],
+    //   credentials: true,
+    // }),
     bodyParser.json()
   );
 
@@ -74,7 +74,10 @@ async function main() {
   await apolloServer.start().catch((e) => console.log(e));
   apolloServer.applyMiddleware({
     app,
-    cors: { credentials: true, origin: "https://studio.apollographql.com" },
+    cors: {
+      credentials: true,
+      origin: ["http://localhost:5173", "https://studio.apollographql.com"],
+    },
   });
 
   const port = process.env.PORT ?? 4000;

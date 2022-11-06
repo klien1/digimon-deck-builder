@@ -1,8 +1,8 @@
-FROM node:16
+FROM node:alpine
 
 WORKDIR /app
 
-EXPOSE 4000
+EXPOSE 5173
 
 COPY package.json ./
 
@@ -12,4 +12,4 @@ COPY  . ./
 
 ENV NODE_ENV production
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

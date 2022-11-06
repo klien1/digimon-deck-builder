@@ -1,5 +1,12 @@
-version: "3.7"
+version: "3.9"
 services:
+  # frontend:
+  #   build: ./client
+  #   restart: always
+  #   ports:
+  #     - "5173:5173"
+  #   depends_on:
+  #     - backend
   backend:
     build: ./server
     restart: always
@@ -17,8 +24,8 @@ services:
       POSTGRES_DB: digimon
     ports:
       - "5432:5432"
-    volumes:
-      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+    # volumes:
+    #   - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
   redis:
     image: redis:alpine
     restart: always

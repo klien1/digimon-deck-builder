@@ -16,8 +16,6 @@ export class UserResolver {
   async getCurrentUser(@Ctx() ctx: DigimonContext): Promise<UserResponse> {
     const { userId } = ctx.req.session;
 
-    console.log(userId);
-
     if (!userId)
       return {
         errors: [new CustomError("account", "Please login to proceed.")],
@@ -132,7 +130,8 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async registerUser(
-    @Arg("data") newUserData: RegisterUserInput
+    @Arg("data") newUserData: RegisterUserInput,
+    @Ctx() ctx: DigimonContext
   ): Promise<UserResponse> {
     let hash: string;
     try {
@@ -184,10 +183,33 @@ export class UserResolver {
       hashPassword: hash,
     };
 
-    this.userRepository.save(newUser);
+    try {
+      user = await this.userRepository.save(newUser);
+    } catch (error) {
+      return {
+        errors: [
+          new CustomError(
+            "account",
+            "Error creating account. Please try again."
+          ),
+        ],
+      };
+    }
 
+    if (!user) {
+      return {
+        errors: [
+          new CustomError(
+            "account",
+            "Error creating account. Please try to login."
+          ),
+        ],
+      };
+    }
+
+    ctx.req.session.userId = user.id;
     return {
-      user: newUser as User,
+      user,
     };
   }
 }
