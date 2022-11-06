@@ -9,7 +9,7 @@
   },
   "scripts": {
     "migration:generate": "npx typeorm-ts-node-esm migration:generate .\\src\\migrations\\entities -d .\\src\\configs\\ormconfig.ts",
-    "migration:run": "npx typeorm-ts-node-esm migration:run -d .\\src\\configs\\ormconfig.ts",
+    "migration:run": "npx typeorm-ts-node-esm migration:run -d ./src/configs/ormconfig.ts",
     "compile": "tsc",
     "nodemon": "nodemon ./dist/index.js",
     "start": "npm run compile && npm run migration:run && node ./dist/index.js",

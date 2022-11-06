@@ -1,6 +1,6 @@
 import { Resolver, Query } from "type-graphql";
-import { DigimonCard } from "../entities/DigimonCard.js";
-import { dataSource } from "../configs/ormconfig.js";
+import { DigimonCard } from "../../entities/DigimonCard.js";
+import { dataSource } from "../../configs/ormconfig.js";
 
 @Resolver()
 export class DigimonCardResolver {
@@ -14,7 +14,7 @@ export class DigimonCardResolver {
   async getDigimonCards() {
     const cards = await this.digimonCardRepository
       .createQueryBuilder("card")
-      .take(20)
+      // .take(20)
       .getMany();
 
     return cards;

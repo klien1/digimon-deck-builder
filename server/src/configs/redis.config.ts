@@ -7,7 +7,10 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 const redisStore = connectRedis(session);
-export const redisClient = new Redis();
+// export const redisClient = new Redis();
+
+// docker
+export const redisClient = new Redis(6379, "redis://redis");
 
 export const userSession = session({
   name: COOKIE_NAME,

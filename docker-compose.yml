@@ -1,17 +1,15 @@
 version: "3.7"
 services:
-  # backend:
-  #   build: ./server
-  #   restart: always
-  #   ports:
-  #     - "4000:4000"
-  # volumes:
-  #   - ./server:/app
-  # depends_on:
-  #   - postgres
-  #   - redis
+  backend:
+    build: ./server
+    restart: always
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+      - redis
   postgres:
-    image: postgres
+    image: postgres:alpine
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -22,7 +20,7 @@ services:
     volumes:
       - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
   redis:
-    image: redis
+    image: redis:alpine
     restart: always
     ports:
       - "6379:6379"
