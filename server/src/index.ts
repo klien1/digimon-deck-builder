@@ -20,6 +20,7 @@ declare module "express-session" {
 
 async function main() {
   dotenv.config();
+  console.log("IS IT PRODUCTION? ", IS_PRODUCTION);
 
   try {
     await dataSource.initialize();
@@ -66,9 +67,12 @@ async function main() {
 
   app.use(userSession);
 
+  console.log("SET INTROSPECTION TO FALSE BEFORE DEPLOYMENT");
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }) => ({ req, res, redisClient }),
+    introspection: true, // TODO: Change to false on release
+    debug: !IS_PRODUCTION,
   });
 
   await apolloServer.start().catch((e) => console.log(e));

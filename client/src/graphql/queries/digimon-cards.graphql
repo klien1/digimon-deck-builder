@@ -1,0 +1,6 @@
+query getDigimonCards {
+  getDigimonCards {
+    name
+    image_url
+  }
+}
