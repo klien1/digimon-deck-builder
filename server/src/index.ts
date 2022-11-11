@@ -55,7 +55,9 @@ async function main() {
   const app = express();
 
   // Set up our Express middleware to handle CORS, body parsing,
-  app.set("trust proxy", !IS_PRODUCTION);
+  app.set("trust proxy", 1);
+  app.set("Access-Control-Allow-Origin", "http://localhost:5173");
+  app.set("Access-Control-Allow-Credentials", true);
 
   app.use(
     // cors<cors.CorsRequest>({
@@ -75,13 +77,15 @@ async function main() {
     debug: !IS_PRODUCTION,
   });
 
+  const corsOption = {
+    origin: ["http://localhost:5173", "https://studio.apollographql.com"],
+    credentials: true,
+  };
+
   await apolloServer.start().catch((e) => console.log(e));
   apolloServer.applyMiddleware({
     app,
-    cors: {
-      credentials: true,
-      origin: ["http://localhost:5173", "https://studio.apollographql.com"],
-    },
+    cors: corsOption,
   });
 
   const port = process.env.PORT ?? 4000;

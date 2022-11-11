@@ -1,7 +1,7 @@
 import session from "express-session";
 import Redis from "ioredis";
 import connectRedis from "connect-redis";
-import { COOKIE_NAME, IS_PRODUCTION } from "../constants.js";
+import { COOKIE_NAME } from "../constants.js";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -10,7 +10,7 @@ const redisStore = connectRedis(session);
 // export const redisClient = new Redis();
 
 // docker
-export const redisClient = new Redis(6379, "redis://redis");
+export const redisClient = new Redis(6379, process.env.REDIS_URL as string);
 
 export const userSession = session({
   name: COOKIE_NAME,
@@ -22,11 +22,11 @@ export const userSession = session({
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
     httpOnly: true,
-    secure: !IS_PRODUCTION,
-    sameSite: "lax",
+    // secure: IS_PRODUCTION,
+    // sameSite: "lax",
     // cookiese on server
-    // secure: false,
-    // sameSite: "none",
+    secure: false,
+    sameSite: "lax",
   },
   resave: false,
   saveUninitialized: false,

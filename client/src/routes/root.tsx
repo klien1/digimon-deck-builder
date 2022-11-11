@@ -1,3 +1,4 @@
+import { Link, Outlet } from "react-router-dom";
 import Header from "../components/header/header.component";
 import { CardGallery } from "./card-gallery";
 
@@ -7,7 +8,10 @@ const Root: React.FC<RootProps> = ({}) => {
   return (
     <>
       <Header />
-      <CardGallery />
+      <Link to={`login/`}>Login</Link>
+      <Link to={`gallery/`}>Gallery</Link>
+      <Outlet />
+      {/* <CardGallery /> */}
     </>
   );
 };

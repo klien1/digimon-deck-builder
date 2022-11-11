@@ -1,9 +1,5 @@
-import { useQuery } from "@apollo/client";
 import { Box, Center, Flex, Text } from "@chakra-ui/react";
-import {
-  GetDigimonCardsDocument,
-  DigimonCard,
-} from "../graphql/generated/graphql";
+import { useGetDigimonCardsQuery } from "../graphql/generated/graphql";
 
 interface CardGalleryProps {}
 
@@ -21,15 +17,18 @@ export const CardGallery: React.FC<CardGalleryProps> = () => {
 };
 
 function Card() {
-  const { loading, error, data } = useQuery(GetDigimonCardsDocument);
+  // const { loading, error, data } = useQuery(GetDigimonCardsDocument);
+  const { loading, error, data } = useGetDigimonCardsQuery();
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
+  if (!data) return <p>Error</p>;
 
   return (
     <>
       <Flex wrap="wrap" justify="center">
-        {data.getDigimonCards.map((card: DigimonCard) => (
-          <Box w="30%" p={2}>
+        {data.getDigimonCards.map((card, index: number) => (
+          <Box w="30%" p={2} key={index}>
             <img src={card.image_url} />
           </Box>
         ))}
