@@ -1,0 +1,12 @@
+# {
+#   data: {
+#     "email": null,
+#     "password": null,
+#     "username": null
+#   }
+# }
+mutation registerUser($data: RegisterUserInput!) {
+  registerUser(data: $data) {
+    ...UserResponseFragment
+  }
+}

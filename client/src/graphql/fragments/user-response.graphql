@@ -1,0 +1,11 @@
+fragment UserResponseFragment on UserResponse {
+  errors {
+    errorName
+    message
+  }
+  user {
+    username
+    id
+    email
+  }
+}

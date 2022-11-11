@@ -10,7 +10,7 @@ export class RegisterUserInput implements Partial<User> {
   email: string;
 
   @Field()
-  hashPassword: string;
+  password: string;
 }
 
 @ObjectType()

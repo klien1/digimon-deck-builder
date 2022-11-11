@@ -97,7 +97,7 @@ export class UserResolver {
     }
 
     try {
-      if (await argon2.verify(curUser.hashPassword, password)) {
+      if (await argon2.verify(curUser.password, password)) {
         // password matches logs user in
         ctx.req.session.userId = curUser.id;
       } else {
@@ -135,7 +135,7 @@ export class UserResolver {
   ): Promise<UserResponse> {
     let hash: string;
     try {
-      hash = await argon2.hash(newUserData.hashPassword);
+      hash = await argon2.hash(newUserData.password);
     } catch (err) {
       console.error("error hashing password");
       return {
@@ -180,7 +180,7 @@ export class UserResolver {
 
     const newUser = {
       ...newUserData,
-      hashPassword: hash,
+      password: hash,
     };
 
     try {
