@@ -17,7 +17,6 @@ export const CardGallery: React.FC<CardGalleryProps> = () => {
 };
 
 function Card() {
-  // const { loading, error, data } = useQuery(GetDigimonCardsDocument);
   const { loading, error, data } = useGetDigimonCardsQuery();
 
   if (loading) return <p>Loading...</p>;

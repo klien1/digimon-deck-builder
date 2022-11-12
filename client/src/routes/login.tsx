@@ -1,16 +1,8 @@
+import { Button, Center, Container, Text } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-} from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
-import {
+  GetCurrentUserDocument,
   MutationLoginArgs,
-  useGetCurrentUserQuery,
   useLoginMutation,
 } from "../graphql/generated/graphql";
 
@@ -18,46 +10,25 @@ import InputField from "../components/input-field/input-field.component";
 
 interface LoginProps {}
 
-const getCurrentUser = () => {
-  console.log("hello current user: ");
-};
-
-const loginUser = () => {
-  console.log("login user");
-};
-
 const Login: React.FC<LoginProps> = ({}) => {
-  const { data, loading } = useGetCurrentUserQuery();
   const [loginMutation] = useLoginMutation();
   const onSubmit = async (data: MutationLoginArgs) => {
     const { username, password } = data;
-    const a = await loginMutation({
+    await loginMutation({
       variables: {
         username,
         password,
       },
+      refetchQueries: [{ query: GetCurrentUserDocument }],
     });
-    console.log("a: ", a);
-    console.log(data);
   };
-
-  if (loading) return <div>Loading...</div>;
-
-  // const [loginMutation] = useLoginMutation({
-  //   variables: {
-  //     username: "chicken",
-  //     password: "#123",
-  //   },
-  // });
-
-  // console.log("loginObject", loginObject);
-
-  // console.log(data?.getCurrentUser?.errors);
-  // console.log(data?.getCurrentUser?.user);
 
   return (
     <>
       <Container>
+        <Center>
+          <Text fontSize="3xl">Login</Text>
+        </Center>
         <Formik
           initialValues={{ username: "", password: "" }}
           onSubmit={onSubmit}
@@ -82,9 +53,6 @@ const Login: React.FC<LoginProps> = ({}) => {
           )}
         </Formik>
       </Container>
-      {data?.getCurrentUser?.user
-        ? `Welcome ${data.getCurrentUser.user?.username}!`
-        : null}
     </>
   );
 };

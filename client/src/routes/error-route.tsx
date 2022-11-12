@@ -1,6 +1,6 @@
 interface ErrorRouteProps {}
 
-const ErrorRoute: React.FC<ErrorRouteProps> = ({}) => {
+const ErrorRoute: React.FC<ErrorRouteProps> = () => {
   return (
     <>
       <div>ErrorRoute</div>
