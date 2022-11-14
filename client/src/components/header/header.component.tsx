@@ -29,9 +29,11 @@ const Header: React.FC<HeaderProps> = () => {
     <>
       <Box as="nav" bg="#90CDF4" mb={4}>
         <Flex justify="space-between" align="center" px="8" py="4">
-          <Text fontSize="2xl" py="3" px="4">
-            Digimon Deck Builder
-          </Text>
+          <Link to={`gallery/`}>
+            <Text fontSize="2xl" py="3" px="4">
+              Digimon Deck Builder
+            </Text>
+          </Link>
           {!loading && data?.getCurrentUser?.user ? (
             <Flex>
               <Text>Welcome {data?.getCurrentUser?.user.username}</Text>
@@ -44,7 +46,7 @@ const Header: React.FC<HeaderProps> = () => {
               </Breadcrumb>
             </Flex>
           ) : (
-            <Link to="/login">Log in</Link>
+            <Link to="/login-registation">Log in</Link>
           )}
         </Flex>
       </Box>

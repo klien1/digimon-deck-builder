@@ -1,12 +1,13 @@
-import { Button, Center, Container, Text } from "@chakra-ui/react";
+import { Button, Center, Container, Flex, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import {
   GetCurrentUserDocument,
   MutationLoginArgs,
   useLoginMutation,
-} from "../graphql/generated/graphql";
+} from "../../graphql/generated/graphql";
 
-import InputField from "../components/input-field/input-field.component";
+import InputField from "../input-field/input-field.component";
+import { Link } from "react-router-dom";
 
 interface LoginProps {}
 
@@ -27,7 +28,9 @@ const Login: React.FC<LoginProps> = ({}) => {
     <>
       <Container>
         <Center>
-          <Text fontSize="3xl">Login</Text>
+          <Flex justify="space-evenly" w="100%">
+            <Text fontSize="3xl">Login</Text>
+          </Flex>
         </Center>
         <Formik
           initialValues={{ username: "", password: "" }}

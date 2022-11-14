@@ -9,15 +9,18 @@ const Root: React.FC<RootProps> = () => {
     <>
       <Header />
       <Flex justify="space-evenly">
-        <Button>
+        {/* <div>Build Deck</div>
+
+        <div>Search for deck</div> */}
+        {/* <Button>
           <Link to={`login/`}>Login</Link>
-        </Button>
-        <Button>
+        </Button> */}
+        {/* <Button>
           <Link to={`gallery/`}>Gallery</Link>
-        </Button>
-        <Button>
+        </Button> */}
+        {/* <Button>
           <Link to={`register/`}>Register</Link>
-        </Button>
+        </Button> */}
       </Flex>
       <Outlet />
     </>

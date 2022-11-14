@@ -1,11 +1,11 @@
 import { Button, Center, Container, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import InputField from "../components/input-field/input-field.component";
+import InputField from "../input-field/input-field.component";
 import {
   GetCurrentUserDocument,
   RegisterUserInput,
   useRegisterUserMutation,
-} from "../graphql/generated/graphql";
+} from "../../graphql/generated/graphql";
 import * as yup from "yup";
 
 interface RegisterProps {}
