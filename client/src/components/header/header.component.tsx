@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   return (
     <>
-      <Box as="nav" bg="#A0AEC0" mb={4}>
+      <Box as="nav" bg="#90CDF4" mb={4}>
         <Flex justify="space-between" align="center" px="8" py="4">
           <Text fontSize="2xl" py="3" px="4">
             Digimon Deck Builder

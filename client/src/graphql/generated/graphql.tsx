@@ -71,6 +71,7 @@ export type RegisterUserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
+  verifyPassword: Scalars['String'];
 };
 
 export type User = {

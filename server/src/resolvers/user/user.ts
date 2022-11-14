@@ -4,7 +4,12 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import argon2 from "argon2";
 import { DigimonContext } from "../../types.js";
 import { COOKIE_NAME } from "../../constants.js";
-import { RegisterUserInput, UserResponse, CustomError } from "./types.js";
+import {
+  RegisterUserInput,
+  UserResponse,
+  CustomError,
+  registrationSchema,
+} from "./types.js";
 
 @Resolver()
 export class UserResolver {
@@ -133,6 +138,21 @@ export class UserResolver {
     @Arg("data") newUserData: RegisterUserInput,
     @Ctx() ctx: DigimonContext
   ): Promise<UserResponse> {
+    try {
+      await registrationSchema.validate(newUserData, {
+        abortEarly: false,
+      });
+    } catch (error) {
+      const listOfErrors: Array<CustomError> = [];
+      error.inner.forEach((err: any) => {
+        // err.path == name of error
+        // err.errors[0] == error message
+        listOfErrors.push(new CustomError(err.path, err.errors[0]));
+      });
+
+      return { errors: listOfErrors };
+    }
+
     let hash: string;
     try {
       hash = await argon2.hash(newUserData.password);

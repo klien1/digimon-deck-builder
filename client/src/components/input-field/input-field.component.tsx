@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -23,10 +24,10 @@ const InputField: React.FC<InputFieldProps> = ({
     <>
       <Field name={name}>
         {({ field, form }: any) => (
-          <FormControl>
+          <FormControl isInvalid={form?.touched[name] && form?.errors[name]}>
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <Input type={type} {...field} placeholder={placeholder} id={name} />
-            <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+            <FormErrorMessage>{form?.errors[name]}</FormErrorMessage>
           </FormControl>
         )}
       </Field>
